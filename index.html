@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ============================================================
+     EDIT THIS: page title shown in the browser tab
+     ============================================================ -->
+<title>Harrison Neill — Mechanical Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:      #14181d;   /* near-black text */
+    --paper:    #f6f5f2;   /* warm off-white bg */
+    --panel:    #ffffff;   /* card background */
+    --line:     #d9d6cf;   /* hairline rules */
+    --muted:    #6b7178;   /* secondary text */
+    --accent:   #e2483d;   /* signal red — race/telemetry */
+    --accent-dk:#b8362d;
+    --grid:     rgba(20,24,29,0.05);
+    --radius: 4px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    /* faint engineering grid */
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- HEADER ---------- */
+  header {
+    padding: 72px 0 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: clamp(38px, 6vw, 60px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+  .pitch {
+    font-size: clamp(16px, 2.2vw, 19px);
+    color: var(--muted);
+    max-width: 620px;
+    margin-top: 20px;
+  }
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    margin-top: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .contact a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2px;
+    transition: border-color .15s, color .15s;
+  }
+  .contact a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ---------- SECTION LABELS ---------- */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 64px 0 28px;
+  }
+  .section-head .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .section-head h2 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .section-head .rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .project {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 34px;
+  }
+  .project-media {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--line);
+  }
+  /* IMAGE PLACEHOLDER — replace each .ph with a real <img> */
+  .ph {
+    aspect-ratio: 4 / 3;
+    background: repeating-linear-gradient(
+      45deg, #eceae5, #eceae5 10px, #e5e3dd 10px, #e5e3dd 20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 12px;
+  }
+  .project-media img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+  .project-body { padding: 26px 28px 30px; }
+  .project-body .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .project-body h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    margin: 6px 0 4px;
+  }
+  .project-body .role {
+    font-size: 14px;
+    color: var(--accent-dk);
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .project-body p { color: #363b41; margin-bottom: 16px; }
+
+  /* metric chips */
+  .metrics { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+  .metric {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    min-width: 110px;
+  }
+  .metric .val {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .metric .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 6px;
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .skill-cell { background: var(--panel); padding: 20px 22px; }
+  .skill-cell h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .skill-cell p { font-size: 14px; color: #363b41; }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    margin-top: 72px;
+    padding: 40px 0 60px;
+    border-top: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    justify-content: space-between;
+  }
+  footer a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+  footer a:hover { color: var(--accent); }
+
+  @media (max-width: 560px) {
+    header { padding-top: 52px; }
+    .project-body { padding: 22px 20px 26px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Mechanical Engineer · Adelaide, SA</div>
+    <!-- EDIT: your name -->
+    <h1>Harrison Neill</h1>
+    <!-- EDIT: one-line pitch (tighten your resume objective to ~2 sentences) -->
+    <p class="pitch">
+      Final-year mechanical engineering student and Structural Subsystem Lead at
+      Adelaide University Solar Racing. I design aerodynamic and composite structures
+      for solar vehicles competing in the Bridgestone World Solar Challenge.
+    </p>
+    <div class="contact">
+      <!-- EDIT: links. Keep the resume PDF next to your name so recruiters can grab it. -->
+      <a href="mailto:harryneill930@gmail.com">harryneill930@gmail.com</a>
+      <a href="tel:+61437810116">0437 810 116</a>
+      <a href="https://www.linkedin.com/in/YOUR-HANDLE" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="Harrison_Neill_Resume.pdf" target="_blank">Résumé (PDF) ↓</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ================= PROJECTS ================= -->
+  <div class="section-head">
+    <span class="num">01</span>
+    <h2>Selected Work</h2>
+    <span class="rule"></span>
+  </div>
+
+  <!-- ---------- PROJECT 1 : LUMEN IV ---------- -->
+  <article class="project">
+    <div class="project-media">
+      <!-- Replace each .ph div with: <img src="images/lumen4-cfd.jpg" alt="..."> -->
+      <div class="ph">CFD pressure contour<br>[replace with image]</div>
+      <div class="ph">Alias surface render<br>[replace with image]</div>
+      <div class="ph">Streamlines / velocity<br>[replace with image]</div>
+    </div>
+    <div class="project-body">
+      <span class="tag">SOLAR VEHICLE · AERODYNAMICS · CFD</span>
+      <h3>Lumen IV Aeroshell Redesign</h3>
+      <div class="role">Structural Subsystem Lead · Adelaide University Solar Racing · 2026–present</div>
+      <!-- EDIT: ~100 words. Problem → approach → result. -->
+      <p>
+        Led the aeroshell redesign for the Lumen IV solar vehicle, rebuilding the
+        exterior geometry in Autodesk Alias and iterating the aerodynamic form through
+        CFD simulation in ANSYS Fluent. [Add a sentence on the specific problem you were
+        solving — packaging constraints, crosswind stability, the previous car's weak
+        point.] [Add a sentence on your approach — what you swept, how you validated.]
+        The redesigned shell reduced drag and weight substantially over the previous
+        generation at the design stage.
+      </p>
+      <div class="metrics">
+        <div class="metric"><div class="val">−20%</div><div class="lbl">Drag coefficient</div></div>
+        <div class="metric"><div class="val">−26%</div><div class="lbl">Shell weight</div></div>
+        <div class="metric"><div class="val">12</div><div class="lbl">Students led</div></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ---------- PROJECT 2 : LUMEN III ---------- -->
+  <article class="project">
+    <div class="project-media">
+      <div class="ph">FEA stress plot<br>[replace with image]</div>
+      <div class="ph">Fairing part photo<br>[replace with image]</div>
+      <div class="ph">BWSC race photo<br>[replace with image]</div>
+    </div>
+    <div class="project-body">
+      <span class="tag">SOLAR VEHICLE · FEA · MECHANISM DESIGN</span>
+      <h3>Lumen III Retractable Fairings</h3>
+      <div class="role">Team Member · Adelaide University Solar Racing · 2024–2025</div>
+      <!-- EDIT: ~100 words. -->
+      <p>
+        Designed and built retractable wheel fairings for Lumen III under a hard
+        constraint: the vehicle had to meet a 7 m turning-circle regulation without
+        the fairings fouling the wheels at full lock. [Add a sentence on the mechanism —
+        how it retracted, what drove it.] Validated the structure with FEA in ANSYS
+        Mechanical to a safety factor of 3 against competition regulations. The fairing
+        system performed reliably across the full Bridgestone World Solar Challenge race.
+      </p>
+      <div class="metrics">
+        <div class="metric"><div class="val">7 m</div><div class="lbl">Turning circle met</div></div>
+        <div class="metric"><div class="val">SF 3</div><div class="lbl">FEA safety factor</div></div>
+        <div class="metric"><div class="val">BWSC</div><div class="lbl">Race finisher</div></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ---------- PROJECT 3 : ETAMAX ---------- -->
+  <article class="project">
+    <div class="project-media">
+      <div class="ph">Layup / workshop<br>[replace with image]</div>
+      <div class="ph">Finished CFRP part<br>[replace with image]</div>
+      <div class="ph">Detail / weave<br>[replace with image]</div>
+    </div>
+    <div class="project-body">
+      <span class="tag">COMPOSITES · MANUFACTURING</span>
+      <h3>Carbon Fibre Fabrication — Etamax Engineering</h3>
+      <div class="role">Composites Engineering Intern · 2025</div>
+      <!-- EDIT: ~100 words. -->
+      <p>
+        Fabricated the carbon fibre body, ribs, torsion box, and clamshells for Lumen III
+        in a professional composites workshop, working alongside industry engineers.
+        [Add a sentence naming the processes you personally ran — hand layup, vacuum
+        bagging, resin infusion — and any part you owned end to end.] Optimised
+        strength-to-weight ratio, calculated resin requirements, and inspected part
+        quality against acceptance criteria while working safely with adhesives, epoxy
+        resins, and dry fibre.
+      </p>
+    </div>
+  </article>
+
+  <!-- ================= SKILLS ================= -->
+  <div class="section-head">
+    <span class="num">02</span>
+    <h2>Capabilities</h2>
+    <span class="rule"></span>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-cell">
+      <h4>CAD / Surfacing</h4>
+      <p>Autodesk Inventor, Alias, AutoCAD, SpaceClaim, Design Modeler</p>
+    </div>
+    <div class="skill-cell">
+      <h4>Simulation</h4>
+      <p>ANSYS Mechanical (FEA), ANSYS Fluent / CFX (CFD)</p>
+    </div>
+    <div class="skill-cell">
+      <h4>Manufacturing</h4>
+      <p>Carbon fibre layup, vacuum bagging, resin infusion</p>
+    </div>
+    <div class="skill-cell">
+      <h4>Programming</h4>
+      <p>MATLAB, Python</p>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <span>© 2026 Harrison Neill</span>
+    <span>
+      <a href="mailto:harryneill930@gmail.com">Email</a> ·
+      <a href="https://www.linkedin.com/in/YOUR-HANDLE" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/YOUR-HANDLE" target="_blank" rel="noopener">GitHub</a>
+    </span>
+  </footer>
+
+</div>
+</body>
+</html>
