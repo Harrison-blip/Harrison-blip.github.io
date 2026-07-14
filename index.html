@@ -98,6 +98,12 @@
     color: var(--accent);
     font-weight: 500;
   }
+ .project-media--single img {
+    aspect-ratio: auto;
+    max-height: 460px;
+    object-fit: contain;
+    background: #eef0f2;
+  }
   .section-head h2 {
     font-family: 'Archivo', sans-serif;
     font-weight: 600;
@@ -375,11 +381,8 @@
 
   <!-- ---------- PROJECT 1 : LUMEN IV ---------- -->
   <article class="project">
-    <div class="project-media">
-      <!-- Replace each .ph div with: <img src="images/lumen4-cfd.jpg" alt="..."> -->
-      <div class="ph">CFD pressure contour<br>[replace with image]</div>
-      <div class="ph">Alias surface render<br>[replace with image]</div>
-      <div class="ph">Streamlines / velocity<br>[replace with image]</div>
+    <div class="project-media project-media--single">
+      <img src="images/lumen4-total-pressure.jpg" alt="ANSYS Fluent total-pressure pathlines over the Lumen IV aeroshell">
     </div>
     <div class="project-body">
       <span class="tag">SOLAR VEHICLE · AERODYNAMICS · CFD</span>
