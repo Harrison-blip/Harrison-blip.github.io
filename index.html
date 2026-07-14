@@ -237,6 +237,107 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
   }
+
+  /* ---------- CLICKABLE GALLERY (Lumen III) ---------- */
+  .gallery {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  @media (max-width: 720px) {
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+  }
+  .gallery-item {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .gallery-item img {
+    transition: transform .3s ease;
+  }
+  .gallery-item:hover img { transform: scale(1.04); }
+  /* play badge on the video thumbnail */
+  .gallery-item .play-badge {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .gallery-item .play-badge span {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: rgba(20,24,29,0.6);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gallery-item .play-badge span::after {
+    content: "";
+    border-left: 16px solid #fff;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    margin-left: 4px;
+  }
+
+  /* lightbox overlay */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(12,14,17,0.94);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 40px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-stage {
+    max-width: 92vw;
+    max-height: 82vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox-stage img,
+  .lightbox-stage video {
+    max-width: 92vw;
+    max-height: 82vh;
+    width: auto;
+    height: auto;
+    border-radius: var(--radius);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .lb-btn {
+    position: absolute;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+    font-family: 'Archivo', sans-serif;
+  }
+  .lb-btn:hover { background: rgba(226,72,61,0.85); }
+  .lb-close { top: 24px; right: 28px; }
+  .lb-prev { left: 28px; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 28px; top: 50%; transform: translateY(-50%); }
+  .lb-counter {
+    position: absolute;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.7);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+  @media (max-width: 560px) {
+    .lightbox { padding: 16px; }
+    .lb-prev { left: 10px; }
+    .lb-next { right: 10px; }
+    .lb-close { top: 12px; right: 14px; }
+  }
 </style>
 </head>
 <body>
@@ -304,10 +405,26 @@
 
   <!-- ---------- PROJECT 2 : LUMEN III ---------- -->
   <article class="project">
-    <div class="project-media">
-      <div class="ph">FEA stress plot<br>[replace with image]</div>
-      <div class="ph">Fairing part photo<br>[replace with image]</div>
-      <div class="ph">BWSC race photo<br>[replace with image]</div>
+    <div class="project-media gallery">
+      <!-- 4 photos + 1 video. Each item opens the lightbox.
+           data-full = the large version shown when clicked (can be same file).
+           The video item uses data-video instead, pointing at the mp4. -->
+      <div class="gallery-item" data-full="images/lumen3-1.jpg">
+        <img src="images/lumen3-1.jpg" alt="Lumen III fairing — photo 1">
+      </div>
+      <div class="gallery-item" data-full="images/lumen3-2.jpg">
+        <img src="images/lumen3-2.jpg" alt="Lumen III fairing — photo 2">
+      </div>
+      <div class="gallery-item" data-video="images/lumen3-infusion.mp4" data-poster="images/lumen3-infusion-poster.jpg">
+        <img src="images/lumen3-infusion-poster.jpg" alt="Lumen III resin infusion timelapse">
+        <span class="play-badge"><span></span></span>
+      </div>
+      <div class="gallery-item" data-full="images/lumen3-3.jpg">
+        <img src="images/lumen3-3.jpg" alt="Lumen III fairing — photo 3">
+      </div>
+      <div class="gallery-item" data-full="images/lumen3-4.jpg">
+        <img src="images/lumen3-4.jpg" alt="Lumen III fairing — photo 4">
+      </div>
     </div>
     <div class="project-body">
       <span class="tag">SOLAR VEHICLE · FEA · MECHANISM DESIGN</span>
@@ -386,5 +503,70 @@
   </footer>
 
 </div>
+<!-- ================= LIGHTBOX ================= -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Media viewer">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close">×</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+  <div class="lightbox-stage" id="lbStage"></div>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next">›</button>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
+<script>
+(function () {
+  // Collect the gallery items in document order
+  var items = Array.prototype.slice.call(document.querySelectorAll('.gallery .gallery-item'));
+  var lb      = document.getElementById('lightbox');
+  var stage   = document.getElementById('lbStage');
+  var counter = document.getElementById('lbCounter');
+  var current = 0;
+
+  function render(i) {
+    current = (i + items.length) % items.length;   // wrap around
+    var el = items[current];
+    stage.innerHTML = '';
+    if (el.dataset.video) {
+      var v = document.createElement('video');
+      v.src = el.dataset.video;
+      if (el.dataset.poster) v.poster = el.dataset.poster;
+      v.controls = true;
+      v.autoplay = true;
+      v.playsInline = true;
+      stage.appendChild(v);
+    } else {
+      var img = document.createElement('img');
+      img.src = el.dataset.full;
+      img.alt = el.querySelector('img') ? el.querySelector('img').alt : '';
+      stage.appendChild(img);
+    }
+    counter.textContent = (current + 1) + ' / ' + items.length;
+  }
+
+  function open(i) { render(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function close() { lb.classList.remove('open'); stage.innerHTML = ''; document.body.style.overflow = ''; }
+  function next() { render(current + 1); }
+  function prev() { render(current - 1); }
+
+  items.forEach(function (el, i) {
+    el.addEventListener('click', function () { open(i); });
+  });
+
+  document.getElementById('lbClose').addEventListener('click', close);
+  document.getElementById('lbNext').addEventListener('click', next);
+  document.getElementById('lbPrev').addEventListener('click', prev);
+
+  // click the dark backdrop (not the media) to close
+  lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+
+  // keyboard: Esc closes, arrows navigate
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowRight') next();
+    else if (e.key === 'ArrowLeft') prev();
+  });
+})();
+</script>
+
 </body>
 </html>
